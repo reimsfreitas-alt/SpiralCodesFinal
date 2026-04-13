@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpiralCodes</title>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background:#020617;
+  color:#fff;
+  text-align:center;
+}
+
+/* HERO */
+#hero{
+  padding:40px 20px;
+}
+
+h1{
+  font-size:30px;
+  line-height:1.2;
+}
+
+.highlight{
+  color:#22c55e;
+}
+
+p{
+  opacity:0.8;
+}
+
+/* BOTÃO */
+button{
+  padding:18px;
+  margin-top:20px;
+  font-size:18px;
+  background:linear-gradient(90deg,#22c55e,#16a34a);
+  color:#fff;
+  border:none;
+  border-radius:12px;
+  cursor:pointer;
+  width:90%;
+  max-width:350px;
+  font-weight:bold;
+}
+
+/* URGÊNCIA */
+#urgencia{
+  margin-top:10px;
+  font-size:14px;
+  color:#f87171;
+}
+
+/* APP */
+#app{
+  display:none;
+  max-width:700px;
+  margin:auto;
+  padding:10px;
+}
+
+#chat{
+  height:60vh;
+  overflow:auto;
+  padding:10px;
+  text-align:left;
+}
+
+.msg{
+  background:#111827;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:10px;
+}
+
+/* INPUT */
+#inputArea{
+  display:flex;
+  gap:5px;
+}
+
+input{
+  flex:1;
+  padding:15px;
+  border:none;
+  border-radius:10px;
+  background:#111827;
+  color:#fff;
+}
+
+#send{
+  padding:15px;
+  background:#22c55e;
+  border:none;
+  border-radius:10px;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HERO -->
+<div id="hero">
+  <h1>
+    Isso <span class="highlight">não é normal</span>.<br>
+    É IA criando <span class="highlight">qualquer coisa</span>.
+  </h1>
+
+  <p>Imagens, respostas, ideias e código em segundos.</p>
+
+  <a href="https://buy.stripe.com/7sYdR2fmX2008ZV0zFbbG02">
+    <button>Desbloquear agora 🚀</button>
+  </a>
+
+  <div id="urgencia">
+    ⚡ Oferta pode sair do ar a qualquer momento
+  </div>
+
+  <p style="margin-top:10px;font-size:14px;">
+    +137 pessoas usando agora
+  </p>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <h2>🧠 SpiralCodes</h2>
+
+  <div id="chat"></div>
+
+  <div id="inputArea">
+    <input id="input" placeholder="Digite sua ideia..." />
+    <button id="send" onclick="enviar()">Enviar</button>
+  </div>
+</div>
+
+<script>
+
+// LIBERAÇÃO
+window.onload=function(){
+  if(window.location.href.includes("success=true")){
+    localStorage.setItem("premium","true")
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+
+if(
+  localStorage.getItem("premium")==="true" ||
+  urlParams.get("dev")==="true"
+){
+  document.getElementById("hero").style.display="none";
+  document.getElementById("app").style.display="block";
+}
+    document.getElementById("hero").style.display="none";
+    document.getElementById("app").style.display="block";
+  }
+};
+
+// API
+const API_URL="https://throbbing-snowflake-e6e7.reimsfreitas.workers.dev";
+
+// CHAT
+function addMessage(text){
+  let div=document.createElement("div");
+  div.className="msg";
+  div.innerText=text;
+  chat.appendChild(div);
+  chat.scrollTop=9999;
+}
+
+// ENVIO
+async function enviar(){
+  let input=document.getElementById("input");
+  let val=input.value;
+
+  if(!val) return;
+
+  input.value="";
+  addMessage("🧠 Pensando...");
+
+  try{
+    let res=await fetch(API_URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({input:val})
+    });
+
+    let data=await res.json();
+    addMessage(data.response || "Sem resposta.");
+  }catch(err){
+    addMessage("Erro ao conectar.");
+  }
+}
+
+// ENTER
+input.addEventListener("keydown",function(e){
+  if(e.key==="Enter"){
+    enviar();
+  }
+});
+
+</script>
+
+</body>
+</html>
