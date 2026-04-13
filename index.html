@@ -103,7 +103,7 @@ input{
 
 <body>
 
-<!-- HERO -->
+<!-- HERO (VENDA) -->
 <div id="hero">
   <h1>
     Isso <span class="highlight">não é normal</span>.<br>
@@ -141,22 +141,26 @@ input{
 
 // LIBERAÇÃO
 window.onload=function(){
+
+  // após pagamento
   if(window.location.href.includes("success=true")){
     localStorage.setItem("premium","true")
+    window.history.replaceState({}, document.title, "/");
   }
 
   const urlParams = new URLSearchParams(window.location.search);
 
-if(
-  localStorage.getItem("premium")==="true" ||
-  urlParams.get("dev")==="true"
-){
-  document.getElementById("hero").style.display="none";
-  document.getElementById("app").style.display="block";
-}
+  if(
+    localStorage.getItem("premium")==="true" ||
+    urlParams.get("dev")==="true"
+  ){
     document.getElementById("hero").style.display="none";
     document.getElementById("app").style.display="block";
+  }else{
+    document.getElementById("hero").style.display="block";
+    document.getElementById("app").style.display="none";
   }
+
 };
 
 // API
